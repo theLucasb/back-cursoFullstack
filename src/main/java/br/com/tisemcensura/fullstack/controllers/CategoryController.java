@@ -26,7 +26,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryService service;
 	
-	@CrossOrigin	
+	@CrossOrigin
 	@GetMapping
 	public ResponseEntity<List<Category>> findAll(){
 		List<Category> list = service.findAll();
@@ -43,22 +43,24 @@ public class CategoryController {
 	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<Category> create(@RequestBody Category category){
-		category = service.save(category);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId()).toUri();
+		category = service.save(category);		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+		.buildAndExpand(category.getId()).toUri();
 		return ResponseEntity.created(uri).body(category);
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value = {"/{id}"}, method= RequestMethod.PUT)
+	@RequestMapping(value = {"/{id}"}, method = RequestMethod.PUT)
 	public ResponseEntity<Category> update(@RequestBody Category category, @PathVariable Long id){
 		category = service.update(category, id);
 		return ResponseEntity.noContent().build();
 	}
-
+	
 	@CrossOrigin
 	@DeleteMapping(value = {"/{id}"})
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+
 }
