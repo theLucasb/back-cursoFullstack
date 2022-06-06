@@ -10,12 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="products")
-public class Product implements Serializable{
-
-private static final long serialVersionUID = 1L;
+@Table(name = "products")
+public class Product implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -120,7 +119,11 @@ private static final long serialVersionUID = 1L;
 			return false;
 		return true;
 	}
+	
+	
+	
+	
 
-	
-	
 }
+
+

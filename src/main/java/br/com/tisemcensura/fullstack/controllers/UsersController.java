@@ -2,6 +2,7 @@ package br.com.tisemcensura.fullstack.controllers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.tisemcensura.fullstack.dtos.UsersDto;
 import br.com.tisemcensura.fullstack.entities.Users;
 import br.com.tisemcensura.fullstack.services.UsersService;
 
@@ -28,16 +30,19 @@ public class UsersController {
 	
 	@CrossOrigin
 	@GetMapping
-	public ResponseEntity<List<Users>> findAll(){
-		List<Users> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+	public List<UsersDto> findAll(){
+		service.findAll();
+		return service.findAll().stream()
+				.map(user -> new UsersDto(user))
+				.collect(Collectors.toList());
 	}
 	
 	@CrossOrigin
 	@GetMapping(path = {"/{id}"})
-	public ResponseEntity<?> findById(@PathVariable Long id){
-		ResponseEntity<?> list = service.findById(id);
-		return ResponseEntity.ok().body(list);
+	public UsersDto findById(@PathVariable Long id){
+		Users user = service.findById(id);
+		UsersDto usersDto = new UsersDto(user);
+		return usersDto;
 	}
 	
 	@CrossOrigin

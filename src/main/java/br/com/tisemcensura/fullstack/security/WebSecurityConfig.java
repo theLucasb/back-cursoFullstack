@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,16 +23,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception{
+		return super.authenticationManagerBean();
+	}
+	
 	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; 
 	
 	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
+	private JwtRequestFilter jwtRequestFilter = null;
 
 	@CrossOrigin
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/users", "/login").permitAll()
+		http.csrf().disable().authorizeRequests()
+		.antMatchers(HttpMethod.GET, "/users/**").permitAll()
+		.antMatchers(HttpMethod.POST, "/users", "/login", "/email").permitAll()
 				.anyRequest().authenticated()
 				.and().cors()
 				.and().exceptionHandling()
